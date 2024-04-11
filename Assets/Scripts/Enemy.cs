@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -13,13 +14,19 @@ public class Enemy : MonoBehaviour
 
     public GameObject deathEffect;
 
-    private Transform target;
+    public Transform target;
     private int waypointIndex = 0;
+
+    private NavMeshAgent enemyNav; 
 
     void Start()
     {
 
-        target = Waypoints.points[0];
+        // Outdated
+        // target = Waypoints.points[0];
+
+        enemyNav = GetComponent<NavMeshAgent>();
+        enemyNav.SetDestination(target.position);
 
     }
 
@@ -47,7 +54,10 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        // Checks the current direction by comparing the current position to the next waypoint
+
+        // Outdated bc I'm no longer using the node system
+
+        /*// Checks the current direction by comparing the current position to the next waypoint
         Vector3 dir = target.position - transform.position;
 
         // First normalizes the direction vector
@@ -63,10 +73,29 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, target.position) <= 0.2f)
         {
             GetNextWaypoint();
-        }
+        }*/
+
+        // Tbh this one was a my b. I should be checking collision
+        /*if (this.transform.position == target.position)
+        {
+            EndPath();
+        }*/
 
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+        // Sanity check
+        Debug.Log("Currently colliding");
+        EndPath();
+
+        /*if (collision.gameObject == transform.gameObject)
+        {
+            EndPath();
+        }*/
+    }
+
+    // Outdated
     // Gets the next wavepoint
     void GetNextWaypoint()
     {
